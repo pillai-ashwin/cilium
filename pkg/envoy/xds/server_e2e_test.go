@@ -6,7 +6,6 @@ package xds
 import (
 	"context"
 	"log/slog"
-	"reflect"
 	"sort"
 	"testing"
 	"time"
@@ -65,14 +64,14 @@ func responseCheck(response *envoy_service_discovery.DiscoveryResponse,
 				}
 				resourcesAny = append(resourcesAny, a)
 			}
-			// Sort both lists.
-			sort.Slice(response.Resources, func(i, j int) bool {
-				return response.Resources[i].String() < response.Resources[j].String()
-			})
-			sort.Slice(resourcesAny, func(i, j int) bool {
-				return resourcesAny[i].String() < resourcesAny[j].String()
-			})
-			result = reflect.DeepEqual(response.Resources, resourcesAny)
+		// Sort both lists.
+		sort.Slice(response.Resources, func(i, j int) bool {
+			return response.Resources[i].String() < response.Resources[j].String()
+		})
+		sort.Slice(resourcesAny, func(i, j int) bool {
+			return resourcesAny[i].String() < resourcesAny[j].String()
+		})
+		result = assert.ObjectsAreEqual(response.Resources, resourcesAny)
 		}
 
 		return result
